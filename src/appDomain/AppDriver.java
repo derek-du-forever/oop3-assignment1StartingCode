@@ -98,6 +98,7 @@ public class AppDriver {
 		MainInput mainInput = new MainInput();
 
 		for (int i = 0; i < args.length; i++) {
+			String prefix=args[i].substring(0, 2);
 			switch (args[i]) {
 				case "-f":
 					mainInput.setFileName(args[i++].substring(2));
