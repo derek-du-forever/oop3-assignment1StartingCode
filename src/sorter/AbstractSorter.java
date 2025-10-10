@@ -7,7 +7,7 @@ import java.util.Comparator;
  * 
  * @param <T> type parameter
  */
-public abstract class AbstractSorter<T> {
+public abstract class AbstractSorter<T extends Comparable<T>> {
     /**
      * sort
      * 

@@ -5,7 +5,7 @@ package sorter;
  * 
  * @param <T> type parameter
  */
-public class InsertionSorter<T> extends AbstractSorter<T> {
+public class InsertionSorter<T extends Comparable<T>> extends AbstractSorter<T> {
     @Override
     public void sort(T[] arr, java.util.Comparator<T> comp) {
         int n = arr.length;

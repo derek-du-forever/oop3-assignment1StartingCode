@@ -3,7 +3,7 @@ package sorter;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class MergeSorter<T> extends AbstractSorter<T> {
+public class MergeSorter<T extends Comparable<T>> extends AbstractSorter<T> {
 
     @Override
     public void sort(T[] arr, Comparator<T> comp) {

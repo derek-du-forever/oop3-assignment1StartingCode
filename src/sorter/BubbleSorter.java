@@ -7,7 +7,7 @@ import java.util.Comparator;
  * 
  * @param <T> type parameter
  */
-public class BubbleSorter<T> extends AbstractSorter<T> {
+public class BubbleSorter<T extends Comparable<T>> extends AbstractSorter<T> {
 
     @Override
     public void sort(T[] arr, Comparator<T> comp) {
