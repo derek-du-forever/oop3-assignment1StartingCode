@@ -38,6 +38,7 @@ public class AppDriver {
 			return;
 		}
 
+		System.out.println("start resolve data from file...");
 		Shape[] shapes = resolveShapesFromFile(mainInput.getFileName());
 		if (shapes == null) {
 			System.err.println("Error resolving shapes from file: " + mainInput.getFileName());
@@ -53,7 +54,8 @@ public class AppDriver {
 		}
 
 		try {
-			Instant start = Instant.now();
+			System.out.println("start sort...");
+			Instant start = Instant.now();			
 			sortShapes(shapes, sorter, mainInput.getSortingProperty());
 			Instant end = Instant.now();
 			Duration duration = Duration.between(start, end);
@@ -73,7 +75,7 @@ public class AppDriver {
 
 		try (Scanner input = new Scanner(inputFile)) {
 			if (!input.hasNextLine()) {
-				System.err.println("文件为空：" + fileName);
+				System.err.println("file content is empty：" + fileName);
 				return null;
 			}
 
@@ -99,15 +101,15 @@ public class AppDriver {
 
 		for (int i = 0; i < args.length; i++) {
 			String prefix=args[i].substring(0, 2);
-			switch (args[i]) {
+			switch (prefix) {
 				case "-f":
-					mainInput.setFileName(args[i++].substring(2));
+					mainInput.setFileName(args[i].substring(2));
 					break;
-				case "-a":
-					mainInput.setSortingAlgorithmType(args[i++].substring(2));
+				case "-s":
+					mainInput.setSortingAlgorithmType(args[i].substring(2));
 					break;
-				case "-p":
-					mainInput.setSortingProperty(args[i++].substring(2));
+				case "-t":
+					mainInput.setSortingProperty(args[i].substring(2));
 					break;
 				default:
 					throw new IllegalArgumentException("Unknown argument: " + args[i]);
@@ -157,7 +159,7 @@ public class AppDriver {
 
 			Class<?> clazz = shapes[i].getClass();
 			System.out.println(
-					StringUtils.padRight((i + 1) + "-th element: ", 50, ' ')
+					StringUtils.padRight((i + 1) + "-th element: ", 30, ' ')
 							+ StringUtils.padLeft(clazz.getName(), 30, ' ') + "          "
 							+ shapes[i].getProperty(property));
 		}
