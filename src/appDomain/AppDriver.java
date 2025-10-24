@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.time.Duration;
 import java.time.Instant;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import shapes.*;
 import sorter.AbstractSorter;
@@ -26,13 +28,17 @@ public class AppDriver {
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			System.out.println("Usage: java -jar AppDriver.jar -f<filename> -a<algorithm> -p<property>");
+			System.out.println("Usage: java -jar Sort.jar -f<filename> -a<algorithm> -p<property>");
 			return;
 		}
 
 		MainInput mainInput;
 		try {
-			mainInput = parseArgs(args);
+			String[] normalizedArgs = new String[args.length];
+			for (int i = 0; i < args.length; i++) {
+				normalizedArgs[i] = args[i].trim().toLowerCase();
+			}
+			mainInput = parseArgs(normalizedArgs);
 		} catch (IllegalArgumentException e) {
 			System.err.println("Error parsing arguments: " + e.getMessage());
 			return;
@@ -55,7 +61,7 @@ public class AppDriver {
 
 		try {
 			System.out.println("start sort...");
-			Instant start = Instant.now();			
+			Instant start = Instant.now();
 			sortShapes(shapes, sorter, mainInput.getSortingProperty());
 			Instant end = Instant.now();
 			Duration duration = Duration.between(start, end);
@@ -71,7 +77,8 @@ public class AppDriver {
 	}
 
 	private static Shape[] resolveShapesFromFile(String fileName) {
-		File inputFile = new File("res/" + fileName);
+
+		File inputFile = utilities.FileHelper.getFile(fileName);
 
 		try (Scanner input = new Scanner(inputFile)) {
 			if (!input.hasNextLine()) {
@@ -100,7 +107,7 @@ public class AppDriver {
 		MainInput mainInput = new MainInput();
 
 		for (int i = 0; i < args.length; i++) {
-			String prefix=args[i].substring(0, 2);
+			String prefix = args[i].substring(0, 2);
 			switch (prefix) {
 				case "-f":
 					mainInput.setFileName(args[i].substring(2));
