@@ -110,11 +110,7 @@ public class AppDriver {
 		MainInput mainInput = new MainInput();
 
 		for (int i = 0; i < args.length; i++) {
-			System.out.println("Processing argument: " + args[i]);
 			String prefix = args[i].substring(0, 2);
-			System.out.println("Argument prefix: " + prefix);
-			System.out.println("Argument value: " + args[i].substring(2));
-			System.out.println("prefix==-s: " + prefix.equals("-s"));
 			switch (prefix) {
 				case "-f":
 					mainInput.setFileName(args[i].substring(2));
@@ -169,14 +165,46 @@ public class AppDriver {
 	}
 
 	private static void printShapes(Shape[] shapes, String property) {
-		for (int i = 0; i < shapes.length; i++) {
+		int n = shapes.length;
+		if (n == 0)
+			return;
 
-			Class<?> clazz = shapes[i].getClass();
-			System.out.println(
-					StringUtils.padRight((i + 1) + "-th element: ", 30, ' ')
-							+ StringUtils.padLeft(clazz.getName(), 30, ' ') + "          "
-							+ shapes[i].getProperty(property));
+		int maxRows = 20;
+
+		if (n <= maxRows) {
+			for (int i = 0; i < n; i++) {
+				printShapeLine(i, shapes[i], property);
+			}
+			return;
 		}
+
+		int step = 1;
+		while (n / step > maxRows) {
+			step *= 10;
+		}
+		step /= 10;
+		for (int i = 1; i < 10; i++) {
+			if (n / (step * i) <= maxRows) {
+				step = step * i;
+				break;
+			}
+		}
+
+		printShapeLine(0, shapes[0], property);
+
+		for (int i = step; i < n - 1; i += step) {
+			printShapeLine(i - 1, shapes[i - 1], property);
+		}
+
+		printShapeLine(n - 1, shapes[n - 1], property);
+	}
+
+	private static void printShapeLine(int index, Shape shape, String property) {
+		Class<?> clazz = shape.getClass();
+		System.out.println(
+				StringUtils.padRight((index + 1) + "-th element: ", 30, ' ')
+						+ StringUtils.padLeft(clazz.getName(), 30, ' ') + "          "
+						+ shape.getProperty(property));
 	}
 
 	public static String[] fixArgs(String[] args) {
