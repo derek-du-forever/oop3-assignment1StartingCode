@@ -9,7 +9,7 @@ public class FileHelper {
             throw new IllegalArgumentException("File name cannot be null or empty");
         }
 
-        fileName = fileName.trim();
+        fileName = fileName.trim().replace("\"", "");
 
         // check if it's a pure file name (no path separators)
         boolean isPureFileName = !fileName.contains(File.separator)

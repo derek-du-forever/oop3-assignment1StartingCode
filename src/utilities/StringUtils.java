@@ -30,4 +30,24 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+    public static String normalizeDash(String input) {
+        if (input == null)
+            return null;
+
+        String[] dashes = {
+                "\u2013", // en dash
+                "\u2014", // em dash
+                "\u2015", // horizontal bar
+                "\u2212", // minus sign
+                "－" // fullwidth hyphen-minus
+        };
+
+        String result = input;
+        for (String dash : dashes) {
+            result = result.replace(dash, "-");
+        }
+
+        return result;
+    }
 }

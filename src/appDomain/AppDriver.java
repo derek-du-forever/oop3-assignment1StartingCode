@@ -2,11 +2,11 @@ package appDomain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.time.Duration;
 import java.time.Instant;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import shapes.*;
 import sorter.AbstractSorter;
@@ -36,8 +36,11 @@ public class AppDriver {
 		try {
 			String[] normalizedArgs = new String[args.length];
 			for (int i = 0; i < args.length; i++) {
-				normalizedArgs[i] = args[i].trim().toLowerCase();
+				normalizedArgs[i] = StringUtils.normalizeDash(args[i].trim().toLowerCase());
 			}
+
+			// Fix arguments
+			normalizedArgs = fixArgs(normalizedArgs);
 			mainInput = parseArgs(normalizedArgs);
 		} catch (IllegalArgumentException e) {
 			System.err.println("Error parsing arguments: " + e.getMessage());
@@ -107,7 +110,11 @@ public class AppDriver {
 		MainInput mainInput = new MainInput();
 
 		for (int i = 0; i < args.length; i++) {
+			System.out.println("Processing argument: " + args[i]);
 			String prefix = args[i].substring(0, 2);
+			System.out.println("Argument prefix: " + prefix);
+			System.out.println("Argument value: " + args[i].substring(2));
+			System.out.println("prefix==-s: " + prefix.equals("-s"));
 			switch (prefix) {
 				case "-f":
 					mainInput.setFileName(args[i].substring(2));
@@ -170,6 +177,20 @@ public class AppDriver {
 							+ StringUtils.padLeft(clazz.getName(), 30, ' ') + "          "
 							+ shapes[i].getProperty(property));
 		}
+	}
+
+	public static String[] fixArgs(String[] args) {
+		List<String> fixed = new ArrayList<>();
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			if (i + 1 < args.length && args[i + 1].equals(".txt")) {
+				fixed.add(arg + args[i + 1]);
+				i++;
+			} else {
+				fixed.add(arg);
+			}
+		}
+		return fixed.toArray(new String[0]);
 	}
 
 }
